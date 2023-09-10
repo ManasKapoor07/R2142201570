@@ -3,7 +3,7 @@ const axios = require('axios');
 const app = express();
 
 // Function to fetch numbers from a URL
-const fetchNumbers = async (url) => {
+const fetchAllNumbers = async (url) => {
     try {
         // Set a timeout of 500 milliseconds
         const response = await axios.get(url, { timeout: 500 });
@@ -16,14 +16,14 @@ const fetchNumbers = async (url) => {
         ) {
             return response.data.numbers;
         }
-        throw new Error('Invalid response');
+        throw new Error('Invalid response from URL');
     } catch (error) {
-        console.error(`Error fetching data  ${url}: ${error.message}`);
+        console.error(`Error fetching data from ${url}: ${error.message}`);
         return [];
     }
 };
 
-// Endpoint to fetch numbers from multiple URLs
+// Endpoints to fetch numbers from multiple URLs
 app.get('/numbers', async (req, res) => {
     const urls = req.query.url;
 
@@ -36,7 +36,7 @@ app.get('/numbers', async (req, res) => {
     try {
         const allNumbers = [];
         const promise = urls.map(
-            (url) => fetchNumbers(url)
+            (url) => fetchAllNumbers(url)
         );
         const results = await Promise.all(promise);
 
